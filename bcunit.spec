@@ -6,7 +6,7 @@ Summary:	Provide C programmers basic testing functionality
 Summary(pl.UTF-8):	Podstawowa funkcjonalność testów dla programistów C
 Name:		bcunit
 Version:	3.0.2
-Release:	2
+Release:	3
 License:	LGPL v2+
 Group:		Libraries
 Source0:	https://linphone.org/releases/sources/bcunit/%{name}-%{version}.tar.gz
@@ -79,6 +79,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} -C builddir install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+# disable completeness check incompatible with split packaging
+%{__sed} -i -e '/^foreach(target .*IMPORT_CHECK_TARGETS/,/^endforeach/d; /^unset(_IMPORT_CHECK_TARGETS)/d' $RPM_BUILD_ROOT%{_datadir}/BCunit/cmake/BcUnitTargets.cmake
 
 # packaged in includedir / as %doc
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/BCUnit
