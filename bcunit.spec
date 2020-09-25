@@ -9,6 +9,8 @@ Version:	3.0.2
 Release:	3
 License:	LGPL v2+
 Group:		Libraries
+#Source0Download: https://gitlab.linphone.org/BC/public/bcunit/tags
+#Source0:	https://gitlab.linphone.org/BC/public/bcunit/-/archive/%{version}/%{name}-%{version}.tar.bz2
 Source0:	https://linphone.org/releases/sources/bcunit/%{name}-%{version}.tar.gz
 # Source0-md5:	3c197563b790131da8ad1be6a23f9c91
 Patch0:		lib.patch
