@@ -1,0 +1,11 @@
+--- bcunit-74021cc7cb20a4e177748dd2948173e1f9c270ae/Examples/CMakeLists.txt.orig	2020-08-21 12:47:22.000000000 +0200
++++ bcunit-74021cc7cb20a4e177748dd2948173e1f9c270ae/Examples/CMakeLists.txt	2020-09-25 20:59:41.522353756 +0200
+@@ -22,7 +22,7 @@
+ 
+ add_library(bcunitexamples STATIC ExampleTests.c)
+ 
+-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
++include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_BINARY_DIR}/BCUnit/Headers ${CMAKE_SOURCE_DIR}/BCUnit/Headers)
+ 
+ if(ENABLE_BASIC)
+ 	add_subdirectory(BasicTest)

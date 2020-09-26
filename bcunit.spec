@@ -6,16 +6,19 @@ Summary:	Provide C programmers basic testing functionality
 Summary(pl.UTF-8):	Podstawowa funkcjonalność testów dla programistów C
 Name:		bcunit
 Version:	3.0.2
-Release:	3
+%define	gitref	74021cc7cb20a4e177748dd2948173e1f9c270ae
+%define	snap	20200822
+%define	rel	1
+Release:	3.%{snap}.%{rel}
 License:	LGPL v2+
 Group:		Libraries
 #Source0Download: https://gitlab.linphone.org/BC/public/bcunit/tags
-#Source0:	https://gitlab.linphone.org/BC/public/bcunit/-/archive/%{version}/%{name}-%{version}.tar.bz2
-Source0:	https://linphone.org/releases/sources/bcunit/%{name}-%{version}.tar.gz
-# Source0-md5:	3c197563b790131da8ad1be6a23f9c91
+Source0:	https://gitlab.linphone.org/BC/public/bcunit/-/archive/%{gitref}/%{name}-%{snap}.tar.bz2
+# Source0-md5:	9cd76b8e474697898993e0ba28e9b921
 Patch0:		lib.patch
+Patch1:		%{name}-examples.patch
 URL:		https://linphone.org/
-BuildRequires:	cmake
+BuildRequires:	cmake >= 3.1
 BuildRequires:	ncurses-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -58,8 +61,9 @@ Static BCUnit library.
 Statyczna biblioteka BCUnit.
 
 %prep
-%setup -q -n BCunit-%{version}-Source
+%setup -q -n %{name}-%{gitref}
 %patch0 -p1
+%patch1 -p1
 
 %build
 # sources contain "build" directory, so use alternative builddir
@@ -99,7 +103,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog NEWS README TODO
+%doc AUTHORS ChangeLog NEWS README.md TODO
 %attr(755,root,root) %{_libdir}/libbcunit.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libbcunit.so.1
 %dir %{_datadir}/BCUnit
