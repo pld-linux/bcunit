@@ -1,0 +1,78 @@
+--- bcunit-5.2.0/BCUnit/Sources/Curses/Curses.c.orig	2022-02-10 10:32:34.000000000 +0100
++++ bcunit-5.2.0/BCUnit/Sources/Curses/Curses.c	2023-04-07 16:58:14.233673384 +0200
+@@ -952,11 +952,11 @@ static void show_suite_level_help(CU_pSu
+ 
+   snprintf(szTemp, STRING_LENGTH,   _("Commands:  R - run all tests in suite %s"),
+                                     pSuite->pName);
+-  mvwprintw(details_pad.pPad, 0, 0, szTemp);
++  mvwaddstr(details_pad.pPad, 0, 0, szTemp);
+   mvwprintw(details_pad.pPad, 1, 0, _("           S - Select and run a test"));
+   snprintf(szTemp, STRING_LENGTH,   _("           L - List all tests registered in suite %s"),
+                                     pSuite->pName);
+-  mvwprintw(details_pad.pPad, 2, 0, szTemp);
++  mvwaddstr(details_pad.pPad, 2, 0, szTemp);
+   mvwprintw(details_pad.pPad, 3, 0, _("           A - Activate or deactivate a test (toggle)"));
+   mvwprintw(details_pad.pPad, 4, 0, _("           F - Show failures from last test run"));
+   mvwprintw(details_pad.pPad, 5, 0, _("           M - Move up to main menu"));
+@@ -1012,7 +1012,7 @@ static void list_suites(CU_pTestRegistry
+                                   width[3], _("Cleanup?"),
+                                   width[4], _("#Tests"),
+                                   width[5], _("Active?"));
+-  mvwprintw(details_pad.pPad, 0, 0, "%s", szTemp);
++  mvwaddstr(details_pad.pPad, 0, 0, szTemp);
+ 
+   for (i = 0, pCurSuite = pRegistry->pSuite; pCurSuite; pCurSuite = pCurSuite->pNext, i++) {
+     assert(NULL != pCurSuite->pName);
+@@ -1023,7 +1023,7 @@ static void list_suites(CU_pTestRegistry
+              width[3],   (NULL != pCurSuite->pCleanupFunc) ? _("Yes") : _("No"),
+              width[4],   pCurSuite->uiNumberOfTests,
+              width[5],   (CU_FALSE != pCurSuite->fActive) ? _("Yes") : _("No"));
+-    mvwprintw(details_pad.pPad, i + 2, 0, "%s", szTemp);
++    mvwaddstr(details_pad.pPad, i + 2, 0, szTemp);
+   }
+ 
+   mvwprintw(details_pad.pPad, i + 2, 0, "%s",
+@@ -1068,14 +1068,14 @@ static void list_tests(CU_pSuite pSuite)
+   }
+ 
+   snprintf(szTemp, STRING_LENGTH, "%s: %s", _("Suite"), pSuite->pName);
+-  mvwprintw(details_pad.pPad, 0, 0, szTemp);
++  mvwaddstr(details_pad.pPad, 0, 0, szTemp);
+ 
+   snprintf(szTemp, STRING_LENGTH,
+            "%*s  %-*s%*s",
+            width[0], _("#"),
+            width[1], _("Test Name"),
+            width[2], _("Active?"));
+-  mvwprintw(details_pad.pPad, 1, 0, szTemp);
++  mvwaddstr(details_pad.pPad, 1, 0, szTemp);
+ 
+   for (i = 0, pCurTest = pSuite->pTest ;
+        NULL != pCurTest ;
+@@ -1086,7 +1086,7 @@ static void list_tests(CU_pSuite pSuite)
+              width[0], i + 1,
+              width[1], width[1]-1, pCurTest->pName,
+              width[2]-1, (CU_FALSE != pCurTest->fActive) ? _("Yes") : _("No"));
+-    mvwprintw(details_pad.pPad, i + 3, 0, "%s", szTemp);
++    mvwaddstr(details_pad.pPad, i + 3, 0, szTemp);
+   }
+ 
+   mvwprintw(details_pad.pPad, i + 3, 0, "%s",
+@@ -1129,7 +1129,7 @@ static void show_failures(void)
+             ? pFailure->pTest->pName : ""),
+         ((NULL != pFailure->strCondition) ? pFailure->strCondition : ""));
+ 
+-    mvwprintw(details_pad.pPad, i + 3, 0, "%s", szTemp);
++    mvwaddstr(details_pad.pPad, i + 3, 0, szTemp);
+   }
+ 
+   mvwprintw(details_pad.pPad, i + 3, 0, "%s", "=============================================");
+@@ -1158,7 +1158,7 @@ static STATUS curses_set_options_run(voi
+ 
+     snprintf(szTemp, STRING_LENGTH,   _("   1 - Inactive suites/tests treated as runtime failures     %s"),
+                                       (CU_FALSE != CU_get_fail_on_inactive()) ? _("Yes") : _("No "));
+-    mvwprintw(details_pad.pPad, 2, 0, szTemp);
++    mvwaddstr(details_pad.pPad, 2, 0, szTemp);
+     refresh_details_window();
+     read_input_string(_("Enter number of option to change : "), szTemp, STRING_LENGTH);
+     option_num = atol(szTemp);
