@@ -5,18 +5,16 @@
 Summary:	Provide C programmers basic testing functionality
 Summary(pl.UTF-8):	Podstawowa funkcjonalność testów dla programistów C
 Name:		bcunit
-Version:	3.0.2
-%define	gitref	74021cc7cb20a4e177748dd2948173e1f9c270ae
-%define	snap	20200822
-%define	rel	1
-Release:	3.%{snap}.%{rel}
+Version:	5.2.0
+Release:	1
 License:	LGPL v2+
 Group:		Libraries
 #Source0Download: https://gitlab.linphone.org/BC/public/bcunit/tags
-Source0:	https://gitlab.linphone.org/BC/public/bcunit/-/archive/%{gitref}/%{name}-%{snap}.tar.bz2
-# Source0-md5:	9cd76b8e474697898993e0ba28e9b921
+Source0:	https://gitlab.linphone.org/BC/public/bcunit/-/archive/%{version}/%{name}-%{version}.tar.bz2
+# Source0-md5:	8c734804901d3d1caefc2e0827646d29
 Patch0:		lib.patch
 Patch1:		%{name}-examples.patch
+Patch2:		%{name}-format.patch
 URL:		https://linphone.org/
 BuildRequires:	cmake >= 3.1
 BuildRequires:	ncurses-devel
@@ -61,9 +59,10 @@ Static BCUnit library.
 Statyczna biblioteka BCUnit.
 
 %prep
-%setup -q -n %{name}-%{gitref}
+%setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # sources contain "build" directory, so use alternative builddir
