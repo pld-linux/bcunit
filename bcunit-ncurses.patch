@@ -1,0 +1,46 @@
+WINDOW is now opaque struct.
+--- bcunit-5.3.26/BCUnit/Sources/Curses/Curses.c.orig	2024-03-04 22:27:22.825186363 +0100
++++ bcunit-5.3.26/BCUnit/Sources/Curses/Curses.c	2024-03-05 05:46:07.829238241 +0100
+@@ -256,10 +256,8 @@ static bool initialize_windows(void)
+ 
+   start_color();
+ 
+-  f_nLeft = application_windows.pMainWin->_begx;
+-  f_nTop = application_windows.pMainWin->_begy;
+-  f_nWidth = application_windows.pMainWin->_maxx;
+-  f_nHeight = application_windows.pMainWin->_maxy;
++  getbegyx(application_windows.pMainWin, f_nTop, f_nLeft);
++  getmaxyx(application_windows.pMainWin, f_nHeight, f_nWidth);
+ 
+   if (NULL == (application_windows.pTitleWin = newwin(3, f_nWidth, 0, 0))) {
+     goto title_fail;
+@@ -358,10 +356,8 @@ static void refresh_windows(void)
+ {
+   refresh();
+ 
+-  f_nLeft = application_windows.pMainWin->_begx;
+-  f_nTop = application_windows.pMainWin->_begy;
+-  f_nWidth = application_windows.pMainWin->_maxx;
+-  f_nHeight = application_windows.pMainWin->_maxy;
++  getbegyx(application_windows.pMainWin, f_nTop, f_nLeft);
++  getmaxyx(application_windows.pMainWin, f_nHeight, f_nWidth);
+ 
+   refresh_title_window();
+   refresh_progress_window();
+@@ -907,10 +903,12 @@ static bool create_pad(APPPAD* pPad, WIN
+   pPad->uiColumns = uiCols;
+   pPad->uiPadRow = 0;
+   pPad->uiPadCol = 0;
+-  pPad->uiWinLeft = application_windows.pDetailsWin->_begx + 1;
+-  pPad->uiWinTop = application_windows.pDetailsWin->_begy + 1;
+-  pPad->uiWinColumns = application_windows.pDetailsWin->_maxx - 2;
+-  pPad->uiWinRows = application_windows.pDetailsWin->_maxy - 2;
++  getbegyx(application_windows.pDetailsWin, pPad->uiWinTop, pPad->uiWinLeft);
++  getmaxyx(application_windows.pDetailsWin, pPad->uiWinRows, pPad->uiWinColumns);
++  pPad->uiWinLeft += 1;
++  pPad->uiWinTop += 1;
++  pPad->uiWinColumns -= 2;
++  pPad->uiWinRows -=2;
+ 
+   bStatus = true;
+ 

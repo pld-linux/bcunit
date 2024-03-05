@@ -5,18 +5,19 @@
 Summary:	Provide C programmers basic testing functionality
 Summary(pl.UTF-8):	Podstawowa funkcjonalność testów dla programistów C
 Name:		bcunit
-Version:	5.2.0
+Version:	5.3.26
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 #Source0Download: https://gitlab.linphone.org/BC/public/bcunit/tags
 Source0:	https://gitlab.linphone.org/BC/public/bcunit/-/archive/%{version}/%{name}-%{version}.tar.bz2
-# Source0-md5:	8c734804901d3d1caefc2e0827646d29
+# Source0-md5:	9d428059bc8b636d0ca41e1b443b2117
 Patch0:		lib.patch
 Patch1:		%{name}-examples.patch
 Patch2:		%{name}-format.patch
+Patch3:		%{name}-ncurses.patch
 URL:		https://linphone.org/
-BuildRequires:	cmake >= 3.1
+BuildRequires:	cmake >= 3.22
 BuildRequires:	ncurses-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -63,33 +64,44 @@ Statyczna biblioteka BCUnit.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 # sources contain "build" directory, so use alternative builddir
-install -d builddir
-cd builddir
-%cmake .. \
-	-DENABLE_AUTOMATED=ON \
-	-DENABLE_BASIC=ON \
-	-DENABLE_CONSOLE=ON \
-	-DENABLE_CURSES=ON \
-	-DENABLE_DOC=ON \
-	-DENABLE_EXAMPLES=ON \
-	%{!?with_static_libs:-DENABLE_STATIC=OFF}
+%if %{with static_libs}
+%cmake -B builddir-static \
+	-DBUILD_SHARED_LIBS=OFF \
+	-DENABLE_BCUNIT_AUTOMATED=ON \
+	-DENABLE_BCUNIT_BASIC=ON \
+	-DENABLE_BCUNIT_CONSOLE=ON \
+	-DENABLE_BCUNIT_CURSES=ON
 
-%{__make}
+%{__make} -C builddir-static
+%endif
+
+%cmake -B builddir \
+	-DENABLE_BCUNIT_AUTOMATED=ON \
+	-DENABLE_BCUNIT_BASIC=ON \
+	-DENABLE_BCUNIT_CONSOLE=ON \
+	-DENABLE_BCUNIT_CURSES=ON \
+	-DENABLE_BCUNIT_DOC=ON \
+	-DENABLE_BCUNIT_EXAMPLES=ON
+
+%{__make} -C builddir
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
+%if %{with static_libs}
+%{__make} -C builddir-static install \
+	DESTDIR=$RPM_BUILD_ROOT
+%endif
+
 %{__make} -C builddir install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# disable completeness check incompatible with split packaging
-%{__sed} -i -e '/^foreach(target .*IMPORT_CHECK_TARGETS/,/^endforeach/d; /^unset(_IMPORT_CHECK_TARGETS)/d' $RPM_BUILD_ROOT%{_datadir}/BCunit/cmake/BcUnitTargets.cmake
-
 # packaged in includedir / as %doc
-%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/BCUnit
+#{__rm} -r $RPM_BUILD_ROOT%{_docdir}/BCUnit
 
 install -d $RPM_BUILD_ROOT%{_examplesdir}
 %{__mv} $RPM_BUILD_ROOT%{_datadir}/BCUnit/Examples $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
@@ -117,8 +129,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libbcunit.so
 %{_includedir}/BCUnit
 %{_pkgconfigdir}/bcunit.pc
-%dir %{_datadir}/BCunit
-%{_datadir}/BCunit/cmake
+%{_datadir}/BCUnit/cmake
 %{_examplesdir}/%{name}-%{version}
 %{_mandir}/man3/BCUnit.3*
 

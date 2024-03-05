@@ -1,10 +1,18 @@
---- BCunit-5.2.0/BCUnit/Sources/CMakeLists.txt~	2017-07-20 16:06:38.000000000 +0200
-+++ BCunit-5.2.0/BCUnit/Sources/CMakeLists.txt	2018-09-26 11:47:06.695729380 +0200
-@@ -176,6 +176,7 @@ if(ENABLE_STATIC)
+--- bcunit-5.3.26/BCUnit/Sources/CMakeLists.txt.orig	2024-03-04 21:49:07.017623821 +0100
++++ bcunit-5.3.26/BCUnit/Sources/CMakeLists.txt	2024-03-04 21:56:12.778650608 +0100
+@@ -161,13 +161,14 @@ target_include_directories(bcunit PUBLIC
+ 	$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/BCUnit/Headers>
+ 	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/BCUnit/Headers>
+ )
++set_target_properties(bcunit PROPERTIES SOVERSION 1)
+ set_target_properties(bcunit PROPERTIES VERSION 1.0.1)
+ 
+ if(ANDROID)
+ 	target_link_libraries(bcunit PUBLIC "log")
  endif()
- if(ENABLE_SHARED)
- 	add_library(bcunit SHARED ${SOURCE_FILES})
-+	set_target_properties(bcunit PROPERTIES SOVERSION 1)
- 	set_target_properties(bcunit PROPERTIES VERSION 1.0.1)
- 	target_compile_definitions(bcunit INTERFACE "$<BUILD_INTERFACE:IN_BCUNIT_SOURCES>")
- 	target_include_directories(bcunit PUBLIC
+ if(CURSES_LIBRARIES)
+-	target_link_libraries(bcunit INTERFACE ${CURSES_LIBRARIES})
++	target_link_libraries(bcunit PRIVATE ${CURSES_LIBRARIES})
+ endif()
+ target_compile_definitions(bcunit INTERFACE "$<BUILD_INTERFACE:BCUNIT_USE_BUILD_INTERFACE>")
+ 
