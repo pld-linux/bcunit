@@ -5,13 +5,13 @@
 Summary:	Provide C programmers basic testing functionality
 Summary(pl.UTF-8):	Podstawowa funkcjonalność testów dla programistów C
 Name:		bcunit
-Version:	5.3.26
+Version:	5.3.101
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 #Source0Download: https://gitlab.linphone.org/BC/public/bcunit/tags
 Source0:	https://gitlab.linphone.org/BC/public/bcunit/-/archive/%{version}/%{name}-%{version}.tar.bz2
-# Source0-md5:	9d428059bc8b636d0ca41e1b443b2117
+# Source0-md5:	f0e3ef5ba2286c6f5349deb835c8e8ba
 Patch0:		lib.patch
 Patch1:		%{name}-examples.patch
 Patch2:		%{name}-format.patch
@@ -61,10 +61,10 @@ Statyczna biblioteka BCUnit.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
+%patch -P 2 -p1
+%patch -P 3 -p1
 
 %build
 # sources contain "build" directory, so use alternative builddir
